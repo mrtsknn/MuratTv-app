@@ -114,7 +114,7 @@ actual suspend fun probeStream(url: String, headers: Map<String, String>, maxByt
                     if (k < 0) break
                     n += k
                 }
-                ProbeResult(n > 0, probeText(buf, n), r.code)
+                ProbeResult(n > 0, probeText(buf, n), r.code, r.request.url.toString())
             }
         } catch (e: Exception) {
             ProbeResult(false, null)

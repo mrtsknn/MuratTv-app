@@ -2,6 +2,7 @@ package com.murat.yakalatv
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class M3uTest {
     private val sample = """
@@ -85,6 +86,13 @@ class M3uTest {
     fun removeMatchesTokenizedLinks() {
         val text = "#EXTM3U\n#EXTINF:-1,A\nhttp://h/1.ts?token=ESKI\n#EXTINF:-1,B\nhttp://h/2.ts\n"
         assertEquals(listOf("B"), M3u.parse(M3u.remove(text, "http://h/1.ts?token=YENI")).map { it.name })
+    }
+
+    @Test
+    fun linkIdKeepsQueryOnlyForPhpScripts() {
+        assertEquals(linkId("http://h/a/index.m3u8?tok=1"), linkId("http://h/a/index.m3u8?tok=2"))
+        assertEquals("https://h/Turkey.php?ID=1", linkId("https://h/Turkey.php?ID=1"))
+        assertTrue(linkId("https://h/Gledai.php?ID=trt1") != linkId("https://h/Gledai.php?ID=atv"))
     }
 
     @Test

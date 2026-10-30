@@ -50,8 +50,11 @@ expect fun logoFetcher(): Fetcher.Factory<Uri>
 
 class HttpResult(val code: Int, val body: String)
 
-/** Tarama isteğinin sonucu: yanıt geldi mi; metin listesiyse (#EXTM3U) içeriği; HTTP durum kodu (0 = yanıt yok). */
-class ProbeResult(val ok: Boolean, val text: String?, val code: Int = 0)
+/**
+ * Tarama isteğinin sonucu: yanıt geldi mi; metin listesiyse (#EXTM3U) içeriği; HTTP durum kodu (0 = yanıt yok);
+ * yönlendirmelerden sonra varılan adres (listedeki göreli adresler buna göre çözülür).
+ */
+class ProbeResult(val ok: Boolean, val text: String?, val code: Int = 0, val finalUrl: String? = null)
 
 /** Bir parçası "#" ile başlıyorsa metin say (HLS listesi), değilse yayın baytı. */
 fun probeText(buf: ByteArray, n: Int): String? = if (n > 0 && buf[0] == '#'.code.toByte()) buf.decodeToString(0, n) else null

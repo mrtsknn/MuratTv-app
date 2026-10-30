@@ -42,7 +42,9 @@ object Scanner {
                 text.lineSequence().map { it.trim() }.firstOrNull { it.isNotEmpty() && !it.startsWith("#") }
                     ?: return ScanResult(false, 0, height)
             }
-            url = resolve(url, next)
+            // Göreli adres, yönlendirmeden sonra varılan adrese göre çözülür: Xtream linki başka sunucuya yönlenir,
+            // ilk linke göre çözülürse 404 alınır ve çalışan yayın "açılmadı" sayılır
+            url = resolve(r.finalUrl ?: url, next)
         }
         return ScanResult(true, start.elapsedNow().inWholeMilliseconds, height)
     }

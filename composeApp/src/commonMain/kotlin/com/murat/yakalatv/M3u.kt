@@ -12,8 +12,15 @@ data class Channel(
     val id: String get() = linkId(url)
 }
 
-/** m3u_yakala.py'deki _anahtar ile aynı: sorgu ve # kısmı atılmış link. */
-fun linkId(url: String) = url.trim().substringBefore('?').substringBefore('#')
+/**
+ * m3u_yakala.py'deki _anahtar ile aynı: sorgu ve # kısmı atılmış link. .php betiklerinde kanal sorgudadır
+ * (Turkey.php?ID=…); orada sorgu korunur, yoksa farklı kanallar aynı kimliği alır.
+ */
+fun linkId(url: String): String {
+    val u = url.trim().substringBefore('#')
+    val path = u.substringBefore('?')
+    return if ('?' in u && path.endsWith(".php", ignoreCase = true)) u else path
+}
 
 /** Kullanıcının bir kanalda değiştirdiği alanlar; null olan alan listedeki haliyle kalır. */
 data class ChannelEdit(val name: String? = null, val group: String? = null, val logo: String? = null)
